@@ -3,6 +3,13 @@ import requests
 import json
 from dotenv import load_dotenv
 import os
+from fastapi.responses import RedirectResponse
+
+DEFAULT_CITY = "New York"
+DEFAULT_PROMPT = "Please check the weather updates!"
+@app.get("/")
+def root():
+    return RedirectResponse(url=f"/forecast/{DEFAULT_CITY}?prompt={DEFAULT_PROMPT}")
 
 app = FastAPI()
 load_dotenv()
