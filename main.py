@@ -1,17 +1,13 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 import requests
-import json
 from dotenv import load_dotenv
 import os
-from fastapi.responses import RedirectResponse
 
-DEFAULT_CITY = "New York"
-DEFAULT_PROMPT = "Please check the weather updates!"
-@app.get("/")
-def root():
-    return RedirectResponse(url=f"/forecast/{DEFAULT_CITY}?prompt={DEFAULT_PROMPT}")
-
+# Create FastAPI instance
 app = FastAPI()
+
+# Load environment variables
 load_dotenv()
 
 # Configure your API keys here
@@ -57,7 +53,8 @@ def generate_weather_summary(weather_data, promptFromUser):
     
     return "No forecast data available."
 
-@app.get("/forecast/{city}")
+
+@app.get("/")
 async def get_forecast(city: str, prompt: str):
     try:
         weather_data = get_weather_data(city)
@@ -65,4 +62,3 @@ async def get_forecast(city: str, prompt: str):
         return {"city": city, "forecast": forecast_summary}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
